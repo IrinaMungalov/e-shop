@@ -24,13 +24,12 @@ const renderMainMenu = () => {
         switch (option) {
           case 1:
 
-          getProducts((products)=>{
-              renderCatalog(products, (n, product, q) => {
-                  cart.items.push({ n, product, q });
-                  renderMainMenu();
-              });
-
-          })
+          getProducts().then((products) => {
+            renderCatalog(products, (n, product, q) => {
+              cart.items.push({ n, product, q });
+              renderMainMenu();
+            });
+          });
             
             break;
           case 2:
@@ -81,11 +80,11 @@ const renderCart = (cart) => {
           break;
 
         case 0:
-          getProducts((products) => {
-              renderCatalog(products, (n, product, q) => {
-                  cart.items.push({ n, product, q });
-                  renderMainMenu();
-              });
+          getProducts().then((products) => {
+            renderCatalog(products, (n, product, q) => {
+              cart.items.push({ n, product, q });
+              renderMainMenu();
+            });
           });
           break;
       }

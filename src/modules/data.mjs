@@ -13,19 +13,23 @@
 
 
 
-import fs from 'node:fs'
+import {readFile} from 'node:fs/promises'
 
 
-const getProducts = (cb) => {
 
-    fs.readFile("./storage/products.json", (err,data)=> {
-        if (err !== null) {
-            console.log("Error: cannot read products!")
-        } else if (data) {
-            let products = JSON.parse(data.toString())
-            cb(products)
-        }       
-    })
+
+
+
+
+const getProducts = () => {
+    return readFile("./storage/products.json")
+      .then(data => {
+        let products = JSON.parse(data.toString());
+        return products
+      })      
+      .catch(err => {
+        console.log("Error: cannot read products!");
+      })    
 }
 
 
