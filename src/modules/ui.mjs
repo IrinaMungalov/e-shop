@@ -1,6 +1,6 @@
 import readline from 'readline'
 // destructuring
-import {cart, getProducts} from './data.mjs'
+import {getProducts, saveCart, getCart} from './data.mjs'
 
 const io = readline.createInterface({
     input: process.stdin,
@@ -8,39 +8,46 @@ const io = readline.createInterface({
 })
 
 
-const renderMainMenu = () => {
-    console.clear()    
-    let renderLine = () => {
-        let line = '='.repeat(30)
-        console.log(`${line}\nMAIN MENU\n${line}`)
-        console.log("1. Catalog")
-        console.log("2. Cart")
-        console.log("0. Exit")
-    } 
-    renderLine()
+const renderMainMenu = async () => {
+  console.clear();
+  let renderLine = () => {
+    let line = "=".repeat(30);
+    console.log(`${line}\nMAIN MENU\n${line}`);
+    console.log("1. Catalog");
+    console.log("2. Cart");
+    console.log("0. Exit");
+  };
+  renderLine();
 
-    io.question("choose > ", answer => {
-        let option = parseInt(answer)
-        switch (option) {
-          case 1:
+  // loading the cart
+  const cart = await getCart();
 
-          getProducts().then((products) => {
-            renderCatalog(products, (n, product, q) => {
-              cart.items.push({ n, product, q });
-              renderMainMenu();
-            });
-          });
-            
-            break;
-          case 2:
-            renderCart(cart)
-            break;
+  io.question("choose > ", async (answer) => {
+    let option = parseInt(answer);
+    switch (option) {
+      case 1:
+        let products = await getProducts();
 
-          case 0:
-            io.close();
-            break;
-        }
-    })
+        renderCatalog(products, async (n, product, q) => {
+          
+          cart.items.push({ n, product, q });
+
+          const saved = await saveCart(cart);
+
+          renderMainMenu();
+        });
+
+        break;
+      case 2:
+        
+        renderCart(cart);
+        break;
+
+      case 0:
+        io.close();
+        break;
+    }
+  });
 }
 
 const renderCart = (cart) => {
@@ -66,36 +73,36 @@ const renderCart = (cart) => {
     console.log("0. Exit to Main menu")
     
 
-    io.question("choose > ", (answer) => {
+    io.question("choose > ", async (answer) => {
       let option = parseInt(answer);
       switch (option) {
         case 1:
-            removeItem(cart)
+            await removeItem(cart);
           break;
         case 2:
-            changeQuantity(cart)
+            await changeQuantity(cart);
           break;
 
         case 3:
           break;
 
         case 0:
-          getProducts().then((products) => {
-            renderCatalog(products, (n, product, q) => {
-              cart.items.push({ n, product, q });
-              renderMainMenu();
-            });
+          let products = await getProducts();
+
+          renderCatalog(products, (n, product, q) => {
+            cart.items.push({ n, product, q });
+            renderMainMenu();
           });
           break;
       }
     });
-
 }
 
 const removeItem = (cart) => {
-    io.question("Remove a position > ", (answer) => {
+    io.question("Remove a position > ", async (answer) => {
       let position = parseInt(answer)
       cart.items.splice(position - 1, 1)
+      await saveCart(cart)
       renderCart(cart)
     })
 }
@@ -104,16 +111,17 @@ const changeQuantity = (cart) => {
     io.question("Enter the item position to change the quantity: ", (positionAnswer) => {
         let position = parseInt(positionAnswer)
 
-        io.question("Enter a new quantity: ", (qAnswer) => {
+        io.question("Enter a new quantity: ", async (qAnswer) => {
           let newQ = parseInt(qAnswer)
           cart.items[position - 1].q = newQ
+          await saveCart(cart)
           renderCart(cart)
         })
     })
 }
 
 
-const renderCatalog = (products, confirmCb) => {
+const renderCatalog = async (products, confirmCb) => {
     console.clear()
     // HW2:
     let line = "=".repeat(30)
@@ -140,7 +148,7 @@ const renderCatalog = (products, confirmCb) => {
     console.log(`${line}`)
     console.log("0. Exit to Main menu")
 
-    io.question("choose > ", answer => {
+    io.question("choose > ", async (answer) => {
         let n = parseInt(answer)
 
         if (n === 0) {
@@ -156,7 +164,7 @@ const renderCatalog = (products, confirmCb) => {
         } 
 
         let product = products[n - 1]
-        io.question(`how many "${product.name}": ? `, (answer) => {
+        io.question(`how many "${product.name}": ? `,  (answer) => {
         let q = parseInt(answer)
 
         // HW3: check if you've got a number !
@@ -168,11 +176,11 @@ const renderCatalog = (products, confirmCb) => {
         }
 
         let cost = q * product.price;
-        io.question(`product cost "${cost}": confirm (y/n)? `, (answer) => {
+        io.question(`product cost "${cost}": confirm (y/n)? `, async (answer) => {
             
             switch (answer) {
-            case "y":
-                confirmCb(n, product, q);
+            case "y":              
+                await confirmCb(n, product, q);                
                 break;
             case "n":
                 console.log(`product "${product.name}" was not confirmed!`);

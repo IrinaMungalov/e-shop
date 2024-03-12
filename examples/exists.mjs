@@ -1,15 +1,11 @@
 import { stat } from 'node:fs/promises'
 
-const fileExists = (path) => {    
-    return stat(path)
-        .then(stats => {
-            return true
-        })
-        
+const fileExists = async (path) => {    
+    await stat(path)
+    return true       
 }
 
 
 //-----------------------------------
-fileExists("./examples/data.txt")
-    .then( exists => console.log(exists) )
-
+const exists = await fileExists("./examples/data.txt")
+console.log(exists)
