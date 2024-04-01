@@ -177,3 +177,61 @@ HW1: make a function called - getCart()
 
 
 
+
+
+
+
+
+
+
+                                                  host machine
+                                                   /
+                        +-------------------------+--------------+
+ BROWSER                |                       node             |
+---------------+        |                         ^              |
+               |        |                main.mjs |              |
+               |        |    3000       +------------+           |
+               |        |   +---------->| server     |           |
+               | HTTP   |  /            .     ^      .           |
+               +--req-->+  localhost          |                  |  handler
+                        |  127.0.0.1          +-----------------------(req,res)
+                        | +----------- zoom                      |          |
+                        |    1052      app1                      |          |
+                        |                                        |          v
+                        |                                        |
+                        .                                        .
+
+
+
+
+
+
+
+                        
+
+
+
+
+
+
+
+
+
+
+# TEMPLATING ENGINES
+
+
+
+    template
+      |
+      v
++---------------+
+|               |
+|               |
+|   engine      | <--------- DATA
+|               |
+|               |
++---------------+
+      |
+      v
+    rendered result

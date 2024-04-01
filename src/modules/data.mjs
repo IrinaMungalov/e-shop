@@ -19,8 +19,11 @@ const getProducts = async () => {
     let data = await readFile("./storage/products.json")
     let products = JSON.parse(data.toString())
 
-    return products
+    return products;
 }
+
+const getProductById = async id => (await getProducts()).find(product => product.id === id);
+
 
 const getCart = async () => {
     let data = await readFile("./storage/cart.json")
@@ -36,4 +39,4 @@ const saveCart = async (cart) => {
 
 
 // packing
-export { getProducts, saveCart, getCart };
+export { getProducts, saveCart,  getProductById, getCart };
