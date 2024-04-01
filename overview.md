@@ -235,3 +235,50 @@ HW1: make a function called - getCart()
       |
       v
     rendered result
+
+
+
+
+
+
+
+
+
+
+
+
+CLIENT                                                SERVER
+
+  --------------- req GET ------- "/buy/1" ---------> reg.url
+                                                        |
+                                                        v
+                                                        id
+                                                        |
+                                                        |   product = getProductById(id) <-- data
+                                                        |     |
+                                                        v     v
+                                      render(/order.html, { product: product })
+                                                        |
+                                                        v
+form  <------------ res HTML ---------------------------+
+|
+v
+fills data
+|
+v
+SUBMIT
+v
+name="fullName"       |
+name="emailAddress"   | --> /pay?fullName=John Doe&emailAddress...+
+name="phoneNumber"    |                                           |
+                                                                  v
+                                        /pay?fullName=John+Doe&emailAddress=pd%40ya.ru&phoneNumber=123
+                                            |
+                                            v
+                                        fullName=John+Doe&emailAddress=pd%40ya.ru&phoneNumber=123
+                                            |
+                                            .parse()
+                                            v
+                                            {
+                                              fullName:...
+                                            }

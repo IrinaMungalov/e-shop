@@ -1,4 +1,6 @@
 import http from 'node:http'
+import querystring from 'node:querystring'
+
 import { getProducts, getProductById } from './modules/data.mjs'
 import { render } from './modules/template.mjs'
 import { readFile } from 'node:fs/promises'
@@ -20,28 +22,28 @@ const server = http.createServer(async (req,res) => {
         html = await readFile(`.${req.url}`)
         
     } else if (req.url.startsWith("/buy")) {
-        // "/buy/1"
+      // let id = parseInt(req.url.split("/").pop())
 
-        // let id = parseInt(req.url.split("/").pop())
+      // HW2*: what if "/buy?id=1"
+      // let id = parseInt(req.url.match(/\/buy\?id=(\d+)/)[1])
 
-        // HW2*: what if "/buy?id=1"
+      // HW3: add a checkbox "i agree with terms"
+      //      check of it is checked - server side
 
-        // let id = parseInt(req.url.match(/\/buy\?id=(\d+)/)[1])
-
-        // HW3: add a checkbox "i agree with terms"
-        //      check of it is checked - server side           
-
-            // HW1: try to use regexp capture
-            let id = parseInt(req.url.match(/\/buy\/(\d+)/)[1]);
-            let product = await getProductById(id);
-            html = await render("./pages/order.html", { product: product });
+      // HW1: try to use regexp capture
+      let id = parseInt(req.url.match(/\/buy\/(\d+)/)[1]);
+      let product = await getProductById(id);
+      html = await render("./pages/order.html", { product: product });
+    
+    } else if (req.url.startsWith("/pay")) {
         
-        
-      
+      let parameters = req.url.split("?");
+      let data = querystring.parse(parameters[1]);
+      console.log("data", data)
+
     } else {
-
-        html = `Oops, not found ;(`
-        res.statusCode = 404
+      html = `Oops, not found ;(`;
+      res.statusCode = 404;
     } 
 
     res.end(html)
