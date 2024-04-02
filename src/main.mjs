@@ -25,10 +25,7 @@ const server = http.createServer(async (req,res) => {
       // let id = parseInt(req.url.split("/").pop())
 
       // HW2*: what if "/buy?id=1"
-      // let id = parseInt(req.url.match(/\/buy\?id=(\d+)/)[1])
-
-      // HW3: add a checkbox "i agree with terms"
-      //      check of it is checked - server side
+      // let id = parseInt(req.url.match(/\/buy\?id=(\d+)/)[1])      
 
       // HW1: try to use regexp capture
       let id = parseInt(req.url.match(/\/buy\/(\d+)/)[1]);
@@ -36,16 +33,23 @@ const server = http.createServer(async (req,res) => {
       html = await render("./pages/order.html", { product: product });
     
     } else if (req.url.startsWith("/pay")) {
-
       let parameters = req.url.split("?");
       let data = querystring.parse(parameters[1]);
-      console.log("data", data)
-      await saveOrder(data)
-      html = 'Order saved!'
+      console.log("data", data);
+
+      // HW3: add a checkbox "i agree with terms"
+      //      check of it is checked - server side
+
+        if (data.agreeTerms == "on") {
+            await saveOrder(data)
+            html = "Order saved!"
+        } else {
+            html = "You must agree to the terms!"
+        }
 
     } else {
-      html = `Oops, not found ;(`;
-      res.statusCode = 404;
+      html = `Oops, not found ;(`
+      res.statusCode = 404
     } 
 
     res.end(html)
