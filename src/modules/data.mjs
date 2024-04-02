@@ -32,6 +32,23 @@ const getCart = async () => {
     return cart
 }
 
+const saveOrder = async (order) => {
+    let data = await readFile("./storage/orders.json");
+    let orders = JSON.parse(data.toString());
+    orders.push(order);
+    data = JSON.stringify(orders);
+    writeFile("./storage/orders.json", data);
+}
+
+
+
+
+
+
+
+
+
+
 const saveCart = async (cart) => {
     await writeFile("./storage/cart.json", JSON.stringify(cart, null, 2) );
     return true
@@ -39,4 +56,4 @@ const saveCart = async (cart) => {
 
 
 // packing
-export { getProducts, saveCart,  getProductById, getCart };
+export { getProducts, saveCart,  getProductById, getCart, saveOrder };

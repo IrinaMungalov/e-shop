@@ -1,7 +1,7 @@
 import http from 'node:http'
 import querystring from 'node:querystring'
 
-import { getProducts, getProductById } from './modules/data.mjs'
+import { getProducts, getProductById, saveOrder } from './modules/data.mjs'
 import { render } from './modules/template.mjs'
 import { readFile } from 'node:fs/promises'
 
@@ -36,10 +36,12 @@ const server = http.createServer(async (req,res) => {
       html = await render("./pages/order.html", { product: product });
     
     } else if (req.url.startsWith("/pay")) {
-        
+
       let parameters = req.url.split("?");
       let data = querystring.parse(parameters[1]);
       console.log("data", data)
+      await saveOrder(data)
+      html = 'Order saved!'
 
     } else {
       html = `Oops, not found ;(`;

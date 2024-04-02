@@ -268,10 +268,11 @@ fills data
 v
 SUBMIT
 v
-name="fullName"       |
-name="emailAddress"   | --> /pay?fullName=John Doe&emailAddress...+
-name="phoneNumber"    |                                           |
-                                                                  v
+name="productId"      | hidden
+name="fullName"       |\
+name="emailAddress"   |  --> /pay?fullName=John Doe&emailAddress...+
+name="phoneNumber"    |/                                           |
+                                                                   v
                                         /pay?fullName=John+Doe&emailAddress=pd%40ya.ru&phoneNumber=123
                                             |
                                             v
@@ -282,3 +283,52 @@ name="phoneNumber"    |                                           |
                                             {
                                               fullName:...
                                             }
+
+
+
+
+
+
+
+
+               SHOW FORM               PROCESS FORM
+
+             s            e           s            e
+             +--- req ----+           +--- req ----+
+             |            |           |     v      |
+             |    id      v           |    id      v
+x------------x============x-----------x============x--------->
+                          |           ^
+                          v           |
+                          +-----------+
+                        id (input > form)
+                              window
+                              CLIENT
+
+
+
+
+
+
+
+
+
+
+
+
+HOW TO SAVE
+------------------
+                         parse
+                         |
+orders.json ----- read --+--> [{},{}]
+                                |
+                                v
+                                push()
+                                |
+                                v
+                                [{},{},{}]
+                                |
+                                |
+orders.json <-- write ----+-----+
+                          |
+                         stringify

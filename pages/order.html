@@ -15,6 +15,7 @@
     <h2>{{ product.name }}</h2>
 
     <form action="/pay" method="GET">
+        <input type="hidden" value="{{ product.id }}" name="productId">
         <label>
             you name <input type="text" placeholder="Full Name" name="fullName">
         </label>
