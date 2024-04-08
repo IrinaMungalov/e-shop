@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "stripe": "^14.22.0",
-    "twig": "^1.17.1"
+    "twig": "^1.17.1",
+    "uuid": "^9.0.1"
   }
 }

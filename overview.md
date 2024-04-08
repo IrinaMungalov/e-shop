@@ -332,3 +332,55 @@ orders.json ----- read --+--> [{},{}]
 orders.json <-- write ----+-----+
                           |
                          stringify
+
+
+
+
+
+
+GET ------------- req ?productId=1&fullName=John+Doe+101&emailAddress=jd101%40example.host&phoneNumber=101&agreeTerms=on ----------->
+                             |
+                            querystring.parse()
+                             v
+                            data = {
+                              id: ...       <-------- uuid()
+                              payed: ...    <-------- false
+                              productId: ...
+                              fullName: ...
+                            }
+                              |
+                              v
+                            saveOrder()
+                              |
+                              v
+                            orders.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+stripe / gateway
+
+  > payment link + redirect
+
+
+
+
+
+  app ------- api / info / product + price + payment link -------> STRIPE
+                                               |
+     <------------ url ------------------------+
+     
+  client ------------ url ----------------------+
+                                                |
+                                              pay/cancel
+                                                |
+                                                v
