@@ -12,6 +12,7 @@
   "author": "IM",
   "license": "ISC",
   "dependencies": {
+    "postgres": "^3.4.4",
     "stripe": "^14.22.0",
     "twig": "^1.17.1",
     "uuid": "^9.0.1"

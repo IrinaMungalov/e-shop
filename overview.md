@@ -384,3 +384,99 @@ stripe / gateway
                                               pay/cancel
                                                 |
                                                 v
+
+
+
+
+
+
+
+
+
+
+# e-shop / docker / postgresql
+  > docker
+  > docker-compose
+
+
+
+HOST (linux)
+  \
++--+---------------------------------------------------------------+
+   postgresql-server                
+                |
+                +-- 5432
+
+
+                                             docker-compose.yaml
+                                                  |
+                                                config
+                                                  |
+                                                  v
+                                                docker <------ postgres:16.2-bullseye (image) <---- docker-hub
+  node-pgdb (container)                           |
+      \                                           |
+  +----+-------------------------------+          |
+  |                                    |          |
+  |                 <-----------------------------+  
+  |                                    |
+  |       postgresql-server            |
+  |       |    |        |              | ports
+  |       |    |        +-- 5432 ---------> 10000 <---- psql - no connection
+  |       |    |                       |
+  |       |    +-- e_shop_db           |
+  |       v                            | volumes
+  |  /var/lib/postgresql/data   +---------> /data
+  |                                    |
+  +------------------------------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  CASCADING
+      |
+      |   products
+      +---> +-- id    (PK)
+      |     +-- name
+      |     +-- price_amount
+      |     +-- price_currency
+      |     +-- image
+      |
+      |   orders
+      |     +-- id      (PK)
+      +---- +-- productId
+            +-- fullName
+            +-- emailAddress
+            +-- phoneNumber
+            +-- payed
+
+
+
+
+
+
+
+
+
+        nodejs
+          ^
+          |
+         run
+          |
++---------+----------+
+|                    |
+|                    |
+|   app (js)         <------- postgres -----> postgresql-server
+|                    |      (driver/connector)
++--------------------+
+
