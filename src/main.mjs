@@ -92,6 +92,10 @@ const server = http.createServer(async (req,res) => {
       let {id} = querystring.parse(parameters[1])
       await confirmOrder(id)
       // HW: show a payment succes / order places message
+      html = `<h1>Payment Successful!</h1>
+              <p>Your order has been successfully placed. Thank you for your purchase!</p>
+              <p><a href="/">Home</a></p>
+            `;
     } else {
       html = `Oops, not found ;(`
       res.statusCode = 404
